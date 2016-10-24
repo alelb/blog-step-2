@@ -17,8 +17,7 @@
     "graphql": "^0.7.2",
     "mongodb": "^2.2.10",
     "mongoose": "^4.6.4",
-    "mongoose-reverse-populate": "^1.1.0",
-    "promised-mongo": "^1.2.0"
+    "mongoose-reverse-populate": "^1.1.0"
   },
   "devDependencies": {
     "babel-cli": "6.5.1",

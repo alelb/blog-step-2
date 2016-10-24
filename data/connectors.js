@@ -48,8 +48,6 @@ module.exports.getAuthor = ({_id}) => {
           idField: "author"
       }
       reversePopulate(opts, function(err, popAuthors) {
-          //popAuthors will be populated with posts under .posts property
-
           var opts = {
               modelArray: popAuthors,
               storeWhere: "comments",
@@ -57,13 +55,10 @@ module.exports.getAuthor = ({_id}) => {
               mongooseModel: Comment,
               idField: "author"
           }
-
           reversePopulate(opts, function(err, authors) {
             err ? reject(err) : resolve(authors);
           });
-
       });
-
     });
   })
 }
@@ -80,8 +75,6 @@ module.exports.getAuthors = ({limit, last}) => {
               idField: "author"
           }
           reversePopulate(opts, function(err, popAuthors) {
-              //popAuthors will be populated with posts under .posts property
-
               var opts = {
                   modelArray: popAuthors,
                   storeWhere: "comments",
@@ -89,15 +82,10 @@ module.exports.getAuthors = ({limit, last}) => {
                   mongooseModel: Comment,
                   idField: "author"
               }
-
               reversePopulate(opts, function(err, authors) {
                 err ? reject(err) : resolve(authors);
               });
-
           });
-
-
-      //err ? reject(err) : resolve(author);
     });
   });
 }
@@ -133,7 +121,7 @@ module.exports.getPosts = () => {
 module.exports.createPost = (args) => {
   return new Promise((resolve, reject) => {
     let post = new Post();
-    post._id = args.input.id;
+
     post.title = args.input.title;
     post.text = args.input.text;
     post.author = args.input.author;
@@ -161,7 +149,6 @@ module.exports.getComments = () => {
 module.exports.createComment = (args) => {
   return new Promise((resolve, reject) => {
     let comment = new Comment();
-    comment._id = args.input.id;
     comment.text = args.input.text;
     comment.author = args.input.author;
     comment.post = args.input.post;
@@ -171,8 +158,8 @@ module.exports.createComment = (args) => {
         Comment.findById(comment._id)
         .populate({path:'author', model: 'Author'})
         .populate({path:'post', model: 'Post'})
-        .exec((err, post) => {
-          err ? reject(err) : resolve(comment);
+        .exec((err, fetchedComment) => {
+          err ? reject(err) : resolve(fetchedComment);
         });
       }
     });
@@ -189,8 +176,14 @@ module.exports.deleteComment = (args) => {
 
 module.exports.updateComment = (args) => {
   return new Promise((resolve, reject) => {
-    Comment.findOneAndUpdate({'_id': args.id}, {'text': args.text}).exec((err, comment) => {
-      err ? reject(err) : resolve(comment);
+    Comment.findByIdAndUpdate(args.input.id, { $set: { text: args.input.text }}, {upsert: false}, function(err, comment){
+      console.log(comment._id);
+      Comment.findById(comment._id)
+      .populate({path:'author', model: 'Author'})
+      .populate({path:'post', model: 'Post'})
+      .exec((err, fetchedComment) => {
+        err ? reject(err) : resolve(fetchedComment);
+      });
     });
   });
 }
