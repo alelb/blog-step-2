@@ -1,7 +1,16 @@
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
-var { getAuthor, getAuthors, getPosts, getComments, createAuthor, createPost, createComment, deleteComment, updateComment } = require('./data/connectors.js');
+var { getAuthor,
+      getAuthors,
+      getPosts,
+      getComments,
+      createAuthor,
+      createPost,
+      createComment,
+      deleteComment,
+      updateComment
+    } = require('./data/connectors.js');
 var { schema } = require('./data/schema.js');
 
 var Schema = buildSchema(schema);

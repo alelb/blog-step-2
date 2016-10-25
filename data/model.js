@@ -6,13 +6,12 @@ let AuthorSchema = new mongoose.Schema({
   _id: { type:String, required:true, unique:true, index:true, default:mongoose.Types.ObjectId },
   firstName: String,
   lastName: String,
-  email: String,
-  posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
+  email: String
 });
 
 AuthorSchema.set('toJSON', { getters: true });
 let Author = mongoose.model('Author', AuthorSchema);
-module.exports = Author;
+module.exports.Author = Author;
 
 let PostSchema = new mongoose.Schema({
   _id: { type:String, required:true, unique:true, index:true, default:mongoose.Types.ObjectId },
@@ -23,7 +22,7 @@ let PostSchema = new mongoose.Schema({
 
 PostSchema.set('toJSON', { getters: true });
 let Post = mongoose.model('Post', PostSchema);
-module.exports = Post;
+module.exports.Post = Post;
 
 let CommentSchema = new mongoose.Schema({
   _id: { type:String, required:true, unique:true, index:true, default:mongoose.Types.ObjectId },
@@ -34,4 +33,4 @@ let CommentSchema = new mongoose.Schema({
 
 CommentSchema.set('toJSON', { getters: true });
 let Comment = mongoose.model('Comment', CommentSchema);
-module.exports = Comment;
+module.exports.Comment = Comment;
